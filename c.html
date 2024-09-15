@@ -188,6 +188,10 @@
           scrollerInner.style.animation = "none";
           scrollerInner.style.transform = "translateX(-100%)";
           container.style.animation = "hide 1s ease-in-out";
+
+          container.addEventListener("animationend", () => {
+            container.style.bottom = "-80px";
+          });
         });
       };
     </script>
