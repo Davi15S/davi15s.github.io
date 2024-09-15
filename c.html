@@ -3,32 +3,199 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>HELLOW :D</title>
 
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
+    <style>
+      @font-face {
+        font-family: "TerminaBlack";
+        src: URL("termina_black.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-family: "TerminaDemi";
+        src: URL("termina_demi.ttf") format("truetype");
+      }
+
+      body {
+        padding: 0;
+        margin: 0;
+        color: white;
+        height: 100vh;
+        overflow: hidden;
+        background-color: transparent;
+      }
+
+      .container {
+        width: 100%;
+        height: 80px;
+        background-color: #151523;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: show 1s ease-in-out;
+      }
+
+      .title {
+        padding: 0 20px;
+        display: flex;
+        min-width: fit-content;
+        font-family: "TerminaBlack";
+        border-right: solid 0.5px #5e5384;
+        height: 100%;
+        align-items: center;
+      }
+
+      .tag-list {
+        list-style: none;
+      }
+
+      .tag-list li:first-child {
+        border-left: solid 0.5px #5e5384;
+      }
+
+      .scroller {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        display: flex;
+        overflow: hidden;
+        gap: 10px;
+      }
+
+      .scroller .scroller__inner {
+        flex-wrap: nowrap;
+        animation: scroll 55s linear;
+      }
+
+      .scroller__inner {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        color: white;
+      }
+
+      @keyframes show {
+        from {
+          bottom: -80px;
+        }
+        to {
+          bottom: 0;
+        }
+      }
+
+      @keyframes hide {
+        from {
+          bottom: 0;
+        }
+        to {
+          bottom: -80px;
+        }
+      }
+
+      @keyframes scroll {
+        from {
+          transform: translate(25%);
+        }
+        to {
+          transform: translate(-100%);
+        }
+      }
+    </style>
+
     <script>
-      (async () => {
-        const url =
-          "https://docs.google.com/spreadsheets/d/1dilCQ9W4XAr6fRaclYX9mHXj1cw_PdIByK5YwtAD8II/edit?gid=1892599712#gid=1892599712";
-        const data = await (await fetch(url)).arrayBuffer();
-        const workbook = XLSX.read(data);
+      window.onload = function () {
+        (async () => {
+          const url =
+            "https://docs.google.com/spreadsheets/d/1dilCQ9W4XAr6fRaclYX9mHXj1cw_PdIByK5YwtAD8II/edit?gid=1892599712#gid=1892599712";
+          const data = await (await fetch(url)).arrayBuffer();
+          const workbook = XLSX.read(data);
 
-        const sheet = workbook["Sheets"]["Sheet1"];
+          const sheet = workbook["Sheets"]["Sheet1"];
 
-        const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        const extractedData = sheetData
-          .map((row) => row.slice(17, 22))
-          .filter((subArray) => subArray.length > 0);
-        document.getElementById("output").textContent = JSON.stringify(
-          extractedData,
-          null,
-          2
-        );
-      })();
+          const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+          const extractedData = sheetData
+            .map((row) => row.slice(16, 22))
+            .filter((subArray) => subArray.length > 0);
+          const drivers = extractedData.slice(2, 25);
+          console.log(drivers);
+
+          const list = document.querySelector(".tag-list");
+
+          drivers.forEach((element, i) => {
+            const newChild = document.createElement("li");
+            newChild.style.color = "black";
+            newChild.style.minWidth = "200px";
+            newChild.style.height = "100%";
+            newChild.style.display = "flex";
+            newChild.style.alignItems = "center";
+            newChild.style.padding = "10px 40px";
+            newChild.style.color = "white";
+            newChild.style.borderRight = "solid 0.5px #5E5384";
+
+            const order = document.createElement("p");
+            order.textContent = `${element[0]}.`;
+            order.style.fontSize = "20px";
+            order.style.fontFamily = "TerminaDemi";
+            order.style.fontWeight = 900;
+
+            const driver = document.createElement("div");
+            const name = document.createElement("p");
+            const logo = document.createElement("img");
+
+            logo.src = element[4];
+            logo.style.width = "48px";
+            logo.style.height = "48px";
+
+            name.textContent = `${element[1]}`;
+            name.style.fontFamily = "TerminaDemi";
+            name.style.fontSize = "18px";
+            name.style.textWrap = "nowrap";
+
+            driver.style.display = "flex";
+            driver.style.alignItems = "center";
+            driver.style.padding = "0 40px 0 20px";
+
+            const points = document.createElement("p");
+            points.textContent = `${element[3]}`;
+            points.style.fontSize = "20px";
+            points.style.fontFamily = "TerminaDemi";
+            points.style.fontWeight = 900;
+
+            driver.appendChild(logo);
+            driver.appendChild(name);
+
+            newChild.appendChild(order);
+            newChild.appendChild(driver);
+            newChild.appendChild(points);
+
+            list.appendChild(newChild);
+          });
+        })();
+
+        const scrollerInner = document.querySelector(".scroller__inner");
+        const container = document.querySelector(".container");
+
+        scrollerInner.addEventListener("animationend", () => {
+          console.log("Animation ended");
+          scrollerInner.style.animation = "none";
+          scrollerInner.style.transform = "translateX(-100%)";
+          container.style.animation = "hide 1s ease-in-out";
+        });
+      };
     </script>
   </head>
   <body>
-    <pre id="output"></pre>
+    <div class="container">
+      <div class="title">DRIVER CHAMPIONSHIP STANDING</div>
+      <div class="scroller">
+        <ul class="tag-list scroller__inner"></ul>
+      </div>
+    </div>
   </body>
 </html>

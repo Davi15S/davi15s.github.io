@@ -3,32 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
-    <script>
-      (async () => {
-        const url =
-          "https://docs.google.com/spreadsheets/d/1dilCQ9W4XAr6fRaclYX9mHXj1cw_PdIByK5YwtAD8II/edit?gid=1892599712#gid=1892599712";
-        const data = await (await fetch(url)).arrayBuffer();
-        const workbook = XLSX.read(data);
-
-        const sheet = workbook["Sheets"]["Sheet1"];
-
-        const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        const extractedData = sheetData
-          .map((row) => row.slice(2, 8))
-          .filter((subArray) => subArray.length > 0);
-        document.getElementById("output").textContent = JSON.stringify(
-          extractedData,
-          null,
-          2
-        );
-      })();
-    </script>
+    <title>HELLOW :D</title>
   </head>
   <body>
-    <pre id="output"></pre>
+    HELLOW :D
   </body>
 </html>
