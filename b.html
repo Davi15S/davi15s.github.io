@@ -18,7 +18,7 @@
 
         const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         const extractedData = sheetData
-          .map((row) => row.slice(2, 8))
+          .map((row) => row.slice(10, 15))
           .filter((subArray) => subArray.length > 0);
         document.getElementById("output").textContent = JSON.stringify(
           extractedData,
