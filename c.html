@@ -48,7 +48,7 @@
             const container = document.querySelector(".container");
             const title = document.querySelector(".title");
             container.style.bottom = "0px";
-            title.textContent = "DRIVER CHAMPIONSHIP STANDING";
+            title.textContent = "POŘADÍ JEZDCŮ";
 
             drivers.forEach((element, i) => {
               const newChild = document.createElement("li");
@@ -135,7 +135,7 @@
             const container = document.querySelector(".container");
             const title = document.querySelector(".title");
             container.style.bottom = "0px";
-            title.textContent = "TEAM STANDING";
+            title.textContent = "POŘADÍ KONSTRUKTORŮ";
 
             monoposts.forEach((element, i) => {
               const newChild = document.createElement("li");
@@ -192,7 +192,7 @@
             const scrollerInner = document.querySelector(".scroller__inner");
 
             container.style.animation = "show 1s ease-in-out";
-            scrollerInner.style.animation = "scrollMonopost 20s linear";
+            scrollerInner.style.animation = "scrollMonopost 30s linear";
 
             scrollerInner.addEventListener("animationend", () => {
               scrollerInner.style.animation = "none";
