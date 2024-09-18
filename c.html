@@ -37,7 +37,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        animation: show 1s ease-in-out;
       }
 
       .title {
@@ -69,7 +68,6 @@
 
       .scroller .scroller__inner {
         flex-wrap: nowrap;
-        animation: scroll 55s linear;
       }
 
       .scroller__inner {
@@ -106,11 +104,21 @@
           transform: translate(-100%);
         }
       }
+
+      @keyframes scrollMonopost {
+        from {
+          transform: translate(200%);
+        }
+        to {
+          transform: translate(-100%);
+        }
+      }
     </style>
 
     <script>
       window.onload = function () {
         (async () => {
+          let timeout;
           const url =
             "https://docs.google.com/spreadsheets/d/1dilCQ9W4XAr6fRaclYX9mHXj1cw_PdIByK5YwtAD8II/edit?gid=1892599712#gid=1892599712";
           const data = await (await fetch(url)).arrayBuffer();
@@ -119,11 +127,15 @@
           const sheet = workbook["Sheets"]["Sheet1"];
 
           const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-          const extractedData = sheetData
+          const drivers = sheetData
             .map((row) => row.slice(16, 22))
-            .filter((subArray) => subArray.length > 0);
-          const drivers = extractedData.slice(2, 25);
-          console.log(drivers);
+            .filter((subArray) => subArray.length > 0)
+            .slice(2, 25);
+
+          const monoposts = sheetData
+            .map((row) => row.slice(26, 28))
+            .filter((subArray) => subArray.length > 0)
+            .slice(2, 5);
 
           const list = document.querySelector(".tag-list");
 
@@ -218,7 +230,7 @@
             const container = document.querySelector(".container");
             const title = document.querySelector(".title");
             container.style.bottom = "0px";
-            title.textContent = "TEAM MONOPOST STANDING";
+            title.textContent = "TEAM STANDING";
 
             monoposts.forEach((element, i) => {
               const newChild = document.createElement("li");
@@ -281,26 +293,12 @@
 
           driversAnimation();
         })();
-
-        const scrollerInner = document.querySelector(".scroller__inner");
-        const container = document.querySelector(".container");
-
-        scrollerInner.addEventListener("animationend", () => {
-          console.log("Animation ended");
-          scrollerInner.style.animation = "none";
-          scrollerInner.style.transform = "translateX(-100%)";
-          container.style.animation = "hide 1s ease-in-out";
-
-          container.addEventListener("animationend", () => {
-            container.style.bottom = "-80px";
-          });
-        });
       };
     </script>
   </head>
   <body>
     <div class="container">
-      <div class="title">DRIVER CHAMPIONSHIP STANDING</div>
+      <div class="title"></div>
       <div class="scroller">
         <ul class="tag-list scroller__inner"></ul>
       </div>
