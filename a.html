@@ -98,7 +98,7 @@
 
       @keyframes scroll {
         from {
-          transform: translate(20%);
+          transform: translate(25%);
         }
         to {
           transform: translate(-100%);
@@ -107,7 +107,7 @@
 
       @keyframes scrollMonopost {
         from {
-          transform: translate(150%);
+          transform: translate(200%);
         }
         to {
           transform: translate(-100%);
@@ -118,6 +118,7 @@
     <script>
       window.onload = function () {
         (async () => {
+          let timeout;
           const url =
             "https://docs.google.com/spreadsheets/d/1dilCQ9W4XAr6fRaclYX9mHXj1cw_PdIByK5YwtAD8II/edit?gid=1892599712#gid=1892599712";
           const data = await (await fetch(url)).arrayBuffer();
@@ -139,6 +140,11 @@
           const list = document.querySelector(".tag-list");
 
           const driversAnimation = () => {
+            const container = document.querySelector(".container");
+            const title = document.querySelector(".title");
+            container.style.bottom = "0px";
+            title.textContent = "DRIVER CHAMPIONSHIP STANDING";
+
             drivers.forEach((element, i) => {
               const newChild = document.createElement("li");
               newChild.style.color = "black";
@@ -192,7 +198,6 @@
             });
 
             const scrollerInner = document.querySelector(".scroller__inner");
-            const container = document.querySelector(".container");
 
             container.style.animation = "show 1s ease-in-out";
             scrollerInner.style.animation = "scroll 55s linear";
@@ -201,17 +206,32 @@
               scrollerInner.style.animation = "none";
               scrollerInner.style.transform = "translateX(-100%)";
               container.style.animation = "hide 1s ease-in-out";
+            });
 
-              container.addEventListener("animationend", () => {
+            container.addEventListener("animationend", (event) => {
+              if (event.animationName === "hide") {
                 container.style.bottom = "-80px";
+                container.style.animation = "none";
 
                 while (scrollerInner.firstChild) {
                   scrollerInner.removeChild(scrollerInner.firstChild);
                 }
-              });
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                  monopostsAnimation();
+                }, 2000);
+              }
             });
           };
+
           const monopostsAnimation = () => {
+            const container = document.querySelector(".container");
+            const title = document.querySelector(".title");
+            container.style.bottom = "0px";
+            title.textContent = "TEAM MONOPOST STANDING";
+
             monoposts.forEach((element, i) => {
               const newChild = document.createElement("li");
               newChild.style.color = "black";
@@ -243,7 +263,6 @@
             });
 
             const scrollerInner = document.querySelector(".scroller__inner");
-            const container = document.querySelector(".container");
 
             container.style.animation = "show 1s ease-in-out";
             scrollerInner.style.animation = "scrollMonopost 15s linear";
@@ -252,31 +271,34 @@
               scrollerInner.style.animation = "none";
               scrollerInner.style.transform = "translateX(-100%)";
               container.style.animation = "hide 1s ease-in-out";
+            });
 
-              container.addEventListener("animationend", () => {
+            container.addEventListener("animationend", (event) => {
+              if (event.animationName === "hide") {
                 container.style.bottom = "-80px";
+                container.style.animation = "none";
 
                 while (scrollerInner.firstChild) {
                   scrollerInner.removeChild(scrollerInner.firstChild);
                 }
-              });
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                  driversAnimation();
+                }, 1000 * 60 * 8);
+              }
             });
           };
 
-          setInterval(() => {
-            driversAnimation();
-
-            setTimeout(() => {
-              monopostsAnimation();
-            }, 1000);
-          }, 8000);
+          driversAnimation();
         })();
       };
     </script>
   </head>
   <body>
     <div class="container">
-      <div class="title">DRIVER CHAMPIONSHIP STANDING</div>
+      <div class="title"></div>
       <div class="scroller">
         <ul class="tag-list scroller__inner"></ul>
       </div>

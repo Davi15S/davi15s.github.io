@@ -127,57 +127,159 @@
 
           const list = document.querySelector(".tag-list");
 
-          drivers.forEach((element, i) => {
-            const newChild = document.createElement("li");
-            newChild.style.color = "black";
-            newChild.style.minWidth = "200px";
-            newChild.style.height = "100%";
-            newChild.style.display = "flex";
-            newChild.style.alignItems = "center";
-            newChild.style.padding = "10px 40px";
-            newChild.style.color = "white";
-            newChild.style.borderRight = "solid 0.5px #5E5384";
+          const driversAnimation = () => {
+            const container = document.querySelector(".container");
+            const title = document.querySelector(".title");
+            container.style.bottom = "0px";
+            title.textContent = "DRIVER CHAMPIONSHIP STANDING";
 
-            const order = document.createElement("p");
-            order.textContent = `${element[0]}.`;
-            order.style.fontSize = "20px";
-            order.style.fontFamily = "TerminaDemi";
-            order.style.fontWeight = 900;
+            drivers.forEach((element, i) => {
+              const newChild = document.createElement("li");
+              newChild.style.color = "black";
+              newChild.style.minWidth = "200px";
+              newChild.style.height = "100%";
+              newChild.style.display = "flex";
+              newChild.style.alignItems = "center";
+              newChild.style.padding = "10px 40px";
+              newChild.style.color = "white";
+              newChild.style.borderRight = "solid 0.5px #5E5384";
 
-            const driver = document.createElement("div");
-            const name = document.createElement("p");
-            const logo = document.createElement("img");
+              const order = document.createElement("p");
+              order.textContent = `${element[0]}.`;
+              order.style.fontSize = "20px";
+              order.style.fontFamily = "TerminaDemi";
+              order.style.fontWeight = 900;
 
-            logo.src = element[4];
-            logo.style.width = "48px";
-            logo.style.height = "48px";
+              const driver = document.createElement("div");
+              const name = document.createElement("p");
+              const logo = document.createElement("img");
 
-            name.textContent = `${element[1]}`;
-            name.style.fontFamily = "TerminaDemi";
-            name.style.fontSize = "18px";
-            name.style.textWrap = "nowrap";
-            name.style.width = "100%";
-            name.style.whiteSpace = "nowrap";
+              logo.src = element[4];
+              logo.style.width = "48px";
+              logo.style.height = "48px";
 
-            driver.style.display = "flex";
-            driver.style.alignItems = "center";
-            driver.style.padding = "0 40px 0 20px";
+              name.textContent = `${element[1]}`;
+              name.style.fontFamily = "TerminaDemi";
+              name.style.fontSize = "18px";
+              name.style.textWrap = "nowrap";
+              name.style.width = "100%";
+              name.style.whiteSpace = "nowrap";
 
-            const points = document.createElement("p");
-            points.textContent = `${element[3]}`;
-            points.style.fontSize = "20px";
-            points.style.fontFamily = "TerminaDemi";
-            points.style.fontWeight = 900;
+              driver.style.display = "flex";
+              driver.style.alignItems = "center";
+              driver.style.padding = "0 40px 0 20px";
 
-            driver.appendChild(logo);
-            driver.appendChild(name);
+              const points = document.createElement("p");
+              points.textContent = `${element[3]}`;
+              points.style.fontSize = "20px";
+              points.style.fontFamily = "TerminaDemi";
+              points.style.fontWeight = 900;
 
-            newChild.appendChild(order);
-            newChild.appendChild(driver);
-            newChild.appendChild(points);
+              driver.appendChild(logo);
+              driver.appendChild(name);
 
-            list.appendChild(newChild);
-          });
+              newChild.appendChild(order);
+              newChild.appendChild(driver);
+              newChild.appendChild(points);
+
+              list.appendChild(newChild);
+            });
+
+            const scrollerInner = document.querySelector(".scroller__inner");
+
+            container.style.animation = "show 1s ease-in-out";
+            scrollerInner.style.animation = "scroll 55s linear";
+
+            scrollerInner.addEventListener("animationend", () => {
+              scrollerInner.style.animation = "none";
+              scrollerInner.style.transform = "translateX(-100%)";
+              container.style.animation = "hide 1s ease-in-out";
+            });
+
+            container.addEventListener("animationend", (event) => {
+              if (event.animationName === "hide") {
+                container.style.bottom = "-80px";
+                container.style.animation = "none";
+
+                while (scrollerInner.firstChild) {
+                  scrollerInner.removeChild(scrollerInner.firstChild);
+                }
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                  monopostsAnimation();
+                }, 2000);
+              }
+            });
+          };
+
+          const monopostsAnimation = () => {
+            const container = document.querySelector(".container");
+            const title = document.querySelector(".title");
+            container.style.bottom = "0px";
+            title.textContent = "TEAM MONOPOST STANDING";
+
+            monoposts.forEach((element, i) => {
+              const newChild = document.createElement("li");
+              newChild.style.color = "black";
+              newChild.style.minWidth = "200px";
+              newChild.style.height = "100%";
+              newChild.style.display = "flex";
+              newChild.style.alignItems = "center";
+              newChild.style.padding = "10px 40px";
+              newChild.style.color = "white";
+              newChild.style.borderRight = "solid 0.5px #5E5384";
+
+              const order = document.createElement("p");
+              order.textContent = `${element[0]}.`;
+              order.style.fontSize = "20px";
+              order.style.fontFamily = "TerminaDemi";
+              order.style.fontWeight = 900;
+              order.style.paddingRight = "20px";
+
+              const monopost = document.createElement("img");
+              monopost.src = element[1];
+              monopost.style.height = "55px";
+              monopost.style.width = "150px";
+              monopost.style.objectFit = "cover";
+
+              newChild.appendChild(order);
+              newChild.appendChild(monopost);
+
+              list.appendChild(newChild);
+            });
+
+            const scrollerInner = document.querySelector(".scroller__inner");
+
+            container.style.animation = "show 1s ease-in-out";
+            scrollerInner.style.animation = "scrollMonopost 15s linear";
+
+            scrollerInner.addEventListener("animationend", () => {
+              scrollerInner.style.animation = "none";
+              scrollerInner.style.transform = "translateX(-100%)";
+              container.style.animation = "hide 1s ease-in-out";
+            });
+
+            container.addEventListener("animationend", (event) => {
+              if (event.animationName === "hide") {
+                container.style.bottom = "-80px";
+                container.style.animation = "none";
+
+                while (scrollerInner.firstChild) {
+                  scrollerInner.removeChild(scrollerInner.firstChild);
+                }
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                  driversAnimation();
+                }, 1000 * 60 * 8);
+              }
+            });
+          };
+
+          driversAnimation();
         })();
 
         const scrollerInner = document.querySelector(".scroller__inner");
