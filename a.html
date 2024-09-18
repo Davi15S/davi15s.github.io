@@ -37,7 +37,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        animation: show 1s ease-in-out;
       }
 
       .title {
@@ -69,7 +68,6 @@
 
       .scroller .scroller__inner {
         flex-wrap: nowrap;
-        animation: scroll 55s linear;
       }
 
       .scroller__inner {
@@ -100,7 +98,16 @@
 
       @keyframes scroll {
         from {
-          transform: translate(25%);
+          transform: translate(20%);
+        }
+        to {
+          transform: translate(-100%);
+        }
+      }
+
+      @keyframes scrollMonopost {
+        from {
+          transform: translate(150%);
         }
         to {
           transform: translate(-100%);
@@ -119,79 +126,151 @@
           const sheet = workbook["Sheets"]["Sheet1"];
 
           const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-          const extractedData = sheetData
+          const drivers = sheetData
             .map((row) => row.slice(2, 8))
-            .filter((subArray) => subArray.length > 0);
-          const drivers = extractedData.slice(2, 25);
+            .filter((subArray) => subArray.length > 0)
+            .slice(2, 25);
+
+          const monoposts = sheetData
+            .map((row) => row.slice(22, 24))
+            .filter((subArray) => subArray.length > 0)
+            .slice(2, 5);
 
           const list = document.querySelector(".tag-list");
 
-          drivers.forEach((element, i) => {
-            const newChild = document.createElement("li");
-            newChild.style.color = "black";
-            newChild.style.minWidth = "200px";
-            newChild.style.height = "100%";
-            newChild.style.display = "flex";
-            newChild.style.alignItems = "center";
-            newChild.style.padding = "10px 40px";
-            newChild.style.color = "white";
-            newChild.style.borderRight = "solid 0.5px #5E5384";
+          const driversAnimation = () => {
+            drivers.forEach((element, i) => {
+              const newChild = document.createElement("li");
+              newChild.style.color = "black";
+              newChild.style.minWidth = "200px";
+              newChild.style.height = "100%";
+              newChild.style.display = "flex";
+              newChild.style.alignItems = "center";
+              newChild.style.padding = "10px 40px";
+              newChild.style.color = "white";
+              newChild.style.borderRight = "solid 0.5px #5E5384";
 
-            const order = document.createElement("p");
-            order.textContent = `${element[0]}.`;
-            order.style.fontSize = "20px";
-            order.style.fontFamily = "TerminaDemi";
-            order.style.fontWeight = 900;
+              const order = document.createElement("p");
+              order.textContent = `${element[0]}.`;
+              order.style.fontSize = "20px";
+              order.style.fontFamily = "TerminaDemi";
+              order.style.fontWeight = 900;
 
-            const driver = document.createElement("div");
-            const name = document.createElement("p");
-            const logo = document.createElement("img");
+              const driver = document.createElement("div");
+              const name = document.createElement("p");
+              const logo = document.createElement("img");
 
-            logo.src = element[4];
-            logo.style.width = "48px";
-            logo.style.height = "48px";
+              logo.src = element[4];
+              logo.style.width = "48px";
+              logo.style.height = "48px";
 
-            name.textContent = `${element[1]}`;
-            name.style.fontFamily = "TerminaDemi";
-            name.style.fontSize = "18px";
-            name.style.textWrap = "nowrap";
-            name.style.width = "100%";
-            name.style.whiteSpace = "nowrap";
+              name.textContent = `${element[1]}`;
+              name.style.fontFamily = "TerminaDemi";
+              name.style.fontSize = "18px";
+              name.style.textWrap = "nowrap";
+              name.style.width = "100%";
+              name.style.whiteSpace = "nowrap";
 
-            driver.style.display = "flex";
-            driver.style.alignItems = "center";
-            driver.style.padding = "0 40px 0 20px";
+              driver.style.display = "flex";
+              driver.style.alignItems = "center";
+              driver.style.padding = "0 40px 0 20px";
 
-            const points = document.createElement("p");
-            points.textContent = `${element[3]}`;
-            points.style.fontSize = "20px";
-            points.style.fontFamily = "TerminaDemi";
-            points.style.fontWeight = 900;
+              const points = document.createElement("p");
+              points.textContent = `${element[3]}`;
+              points.style.fontSize = "20px";
+              points.style.fontFamily = "TerminaDemi";
+              points.style.fontWeight = 900;
 
-            driver.appendChild(logo);
-            driver.appendChild(name);
+              driver.appendChild(logo);
+              driver.appendChild(name);
 
-            newChild.appendChild(order);
-            newChild.appendChild(driver);
-            newChild.appendChild(points);
+              newChild.appendChild(order);
+              newChild.appendChild(driver);
+              newChild.appendChild(points);
 
-            list.appendChild(newChild);
-          });
+              list.appendChild(newChild);
+            });
+
+            const scrollerInner = document.querySelector(".scroller__inner");
+            const container = document.querySelector(".container");
+
+            container.style.animation = "show 1s ease-in-out";
+            scrollerInner.style.animation = "scroll 55s linear";
+
+            scrollerInner.addEventListener("animationend", () => {
+              scrollerInner.style.animation = "none";
+              scrollerInner.style.transform = "translateX(-100%)";
+              container.style.animation = "hide 1s ease-in-out";
+
+              container.addEventListener("animationend", () => {
+                container.style.bottom = "-80px";
+
+                while (scrollerInner.firstChild) {
+                  scrollerInner.removeChild(scrollerInner.firstChild);
+                }
+              });
+            });
+          };
+          const monopostsAnimation = () => {
+            monoposts.forEach((element, i) => {
+              const newChild = document.createElement("li");
+              newChild.style.color = "black";
+              newChild.style.minWidth = "200px";
+              newChild.style.height = "100%";
+              newChild.style.display = "flex";
+              newChild.style.alignItems = "center";
+              newChild.style.padding = "10px 40px";
+              newChild.style.color = "white";
+              newChild.style.borderRight = "solid 0.5px #5E5384";
+
+              const order = document.createElement("p");
+              order.textContent = `${element[0]}.`;
+              order.style.fontSize = "20px";
+              order.style.fontFamily = "TerminaDemi";
+              order.style.fontWeight = 900;
+              order.style.paddingRight = "20px";
+
+              const monopost = document.createElement("img");
+              monopost.src = element[1];
+              monopost.style.height = "55px";
+              monopost.style.width = "150px";
+              monopost.style.objectFit = "cover";
+
+              newChild.appendChild(order);
+              newChild.appendChild(monopost);
+
+              list.appendChild(newChild);
+            });
+
+            const scrollerInner = document.querySelector(".scroller__inner");
+            const container = document.querySelector(".container");
+
+            container.style.animation = "show 1s ease-in-out";
+            scrollerInner.style.animation = "scrollMonopost 15s linear";
+
+            scrollerInner.addEventListener("animationend", () => {
+              scrollerInner.style.animation = "none";
+              scrollerInner.style.transform = "translateX(-100%)";
+              container.style.animation = "hide 1s ease-in-out";
+
+              container.addEventListener("animationend", () => {
+                container.style.bottom = "-80px";
+
+                while (scrollerInner.firstChild) {
+                  scrollerInner.removeChild(scrollerInner.firstChild);
+                }
+              });
+            });
+          };
+
+          setInterval(() => {
+            driversAnimation();
+
+            setTimeout(() => {
+              monopostsAnimation();
+            }, 1000);
+          }, 8000);
         })();
-
-        const scrollerInner = document.querySelector(".scroller__inner");
-        const container = document.querySelector(".container");
-
-        scrollerInner.addEventListener("animationend", () => {
-          console.log("Animation ended");
-          scrollerInner.style.animation = "none";
-          scrollerInner.style.transform = "translateX(-100%)";
-          container.style.animation = "hide 1s ease-in-out";
-
-          container.addEventListener("animationend", () => {
-            container.style.bottom = "-80px";
-          });
-        });
       };
     </script>
   </head>
