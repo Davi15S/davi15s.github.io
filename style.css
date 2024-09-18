@@ -99,7 +99,7 @@ body {
 
 @keyframes scrollMonopost {
   from {
-    transform: translate(200%);
+    transform: translate(60%);
   }
   to {
     transform: translate(-100%);
